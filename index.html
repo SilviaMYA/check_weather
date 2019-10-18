@@ -28,13 +28,6 @@ and open the template in the editor.
                 background-image: linear-gradient(to right, #ADD8E6, gray); 
             }
 
-            #main_container{
-                background-color: black;
-                min-height: 400px;
-                margin-left: 60px;
-                margin-right: 60px;
-            }
-
             h1, h2{
                 margin-top: 30px;
                 color: white;
@@ -61,7 +54,7 @@ and open the template in the editor.
                 height: auto;
             }
 
-            .container_content{
+            .container_content, #main_container{
                 margin: 30px 180px;
             }
             .div_form{
@@ -80,6 +73,20 @@ and open the template in the editor.
             .input-group-btn button{
                 width: 101px;
             }
+
+           #main_container{
+                background-color: #009688;
+                opacity: 0.4;
+                min-height: 150px;
+                margin-bottom: 50px;
+            }
+/*zoom*/
+            #main_container:hover {
+                -ms-transform: scale(1.2); /* IE 9 */
+                -webkit-transform: scale(1.2); /* Safari 3-8 */
+                transform: scale(1.2); 
+            }
+    
         </style>
     </head>
     <body>
@@ -97,7 +104,7 @@ and open the template in the editor.
                     <div class="input-group div_form">
                         <input type="text" class="form-control" pattern="([A-Za-z])" placeholder="city" required="" aria-describedby="basic-addon1">
                         <span class="input-group-btn" id="basic-addon1">
-                            <button type="button" class="btn w3-gray" onclick='javascript:checkWeather("LONDON", "GB")'> check</button>
+                            <button type="button" class="btn w3-gray" onclick='javascript:checkWeather("Madrid", "GB")'> check</button>
                         </span>
                     </div>
                     <div class=" div_form">
@@ -122,7 +129,7 @@ and open the template in the editor.
                 </div>
             </div>
             <div id='main_container'>
-                <h2 class="text-center"> </h2>
+                <h2 class="text-center">  Check weather </h2>
             </div>
 
         </div>
@@ -133,7 +140,7 @@ and open the template in the editor.
             function openForm() {
 
             }
-            var API_KEY_WEATHER = "b0fdd8a458f0675774e28d21de613184";
+            var API_KEY_WEATHER = "my_api_key_here";
             function checkWeather(city, country) {
                 var temperature;
                 console.log(city, country);
