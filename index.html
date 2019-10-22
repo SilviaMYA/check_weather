@@ -15,37 +15,31 @@ and open the template in the editor.
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <style>
             body{
-                background-color: gray; /* For browsers that do not support gradients */
-                background-image: linear-gradient(to right, gray, #ADD8E6); 
+                background: gray;
                 font-family: inherit;
+                background-image: linear-gradient(to right, #252424, gray, #3c3c3c, black); 
             }
 
             .form_container{
                 background: gray;
-                margin: auto;
-                min-height: 200px;
+                height: 400px;
                 background-color: gray; /* For browsers that do not support gradients */
-                background-image: linear-gradient(to right, #ADD8E6, gray); 
+                background-image: linear-gradient(to right, gray, #ADD8E6); 
+
             }
 
             h1, h2{
                 margin-top: 30px;
-                color: white;
+                color: fuchsia;
                 padding: 30px 0px;
+                line-height: inherit;
             }
 
             .btn_search{ 
                 margin-bottom: 30px;
-                float: left;
-            }
-
-            .btn_select{
-                margin-bottom: 30px;
-                float: right;
             }
 
             .btn-lg{
-                width: 350px;
                 border: 2px solid #009688;
             }
 
@@ -54,8 +48,8 @@ and open the template in the editor.
                 height: auto;
             }
 
-            .container_content, #main_container{
-                margin: 30px 180px;
+            .container_content{
+                margin: 30px 0px;
             }
             .div_form{
                 margin-bottom: 30px;
@@ -70,66 +64,60 @@ and open the template in the editor.
                 color: white !important;
                 font-variant: all-small-caps;
             }
-            .input-group-btn button{
-                width: 101px;
+
+            #container_result{
+                height: 400px;
             }
 
-           #main_container{
-                background-color: #009688;
-                opacity: 0.4;
-                min-height: 150px;
-                margin-bottom: 50px;
+            .no_weather{
+                position: relative;
+                -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+                -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+                -webkit-animation-iteration-count: 3; /* Safari 4.0 - 8.0 */
+                animation-name: example;
+                animation-duration: 4s;
+                animation-iteration-count: 3;
             }
-/*zoom*/
-            #main_container:hover {
-                -ms-transform: scale(1.2); /* IE 9 */
-                -webkit-transform: scale(1.2); /* Safari 3-8 */
-                transform: scale(1.2); 
-            }
-    
+            /*zoom*/
+            /*            #container_result:hover {
+                            -ms-transform: scale(1.2);  IE 9 
+                            -webkit-transform: scale(1.2);  Safari 3-8 
+                            transform: scale(1.2); 
+                        }*/
+
         </style>
     </head>
     <body>
         <div class="container">
-            <div class='form_container'>
+            <div class='col-md-12'>
                 <h1 class="text-center">  Check the weather </h1>
+            </div>
+            <div class='col-md-4 form_container'>
                 <div class='container_content'>
                     <div class="text-center div_buttons">
-                        <button type="button" class='w3-button w3-teal btn-lg btn_search' onclick='javascript:openForm("search")'>Search city</button>
-                        <button type="button" class='w3-button w3-teal btn-lg btn_select' onclick='javascript:openForm("select")'>Select city</button>
+                        <button type="button" class='w3-button w3-teal btn-lg btn_search' onclick='searchForm()'>Search city</button>
                     </div>
 
                     <div class='clearfix'></div>
 
                     <div class="input-group div_form">
-                        <input type="text" class="form-control" pattern="([A-Za-z])" placeholder="city" required="" aria-describedby="basic-addon1">
+                        <input type="text" id="cityName"  class="form-control" pattern="([A-Za-z])" placeholder="--City--" autocomplete="on" onfocus="getCityName()">
+
+                        <input type="hidden" id="locality">
+                        <input type="hidden" id="country">
+                        <!--<input type="hidden" id="route">-->
+                        <input type="hidden" id="administrative_area_level_1">
+                        <input type="hidden" id="lat">
+                        <input type="hidden" id="lng">
+
                         <span class="input-group-btn" id="basic-addon1">
-                            <button type="button" class="btn w3-gray" onclick='javascript:checkWeather("Madrid", "GB")'> check</button>
+                            <button type="button" class="btn w3-gray" onclick='javascript:checkWeather()'> check</button>
                         </span>
                     </div>
-                    <div class=" div_form">
-                        <a  href="" class=" bg-info">current location</a>
-                    </div>
-
-                    <!--select-->
-                    <div class="input-group div_form">
-                        <input type="text" class="form-control" aria-label="...">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn w3-gray dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div><!-- /btn-group -->
-                    </div><!-- /input-group -->
 
                 </div>
             </div>
-            <div id='main_container'>
-                <h2 class="text-center">  Check weather </h2>
+            <div class="col-md-8" id='container_result'>
             </div>
 
         </div>
@@ -137,40 +125,144 @@ and open the template in the editor.
 
 
         <script>
-            function openForm() {
+
+            //hide result of the weather sowed bwfore,
+            //remove input placeholder, input last value and set focus on the input
+            function searchForm() {
+                $('#container_result').hide();
+                $(':input').removeAttr('placeholder'); //clear placeholder
+                $('#cityName').val(''); //remove the last value
+                $('#cityName').focus();
+            }
+
+            var autocomplete;
+            var componentForm = {
+                locality: 'long_name',
+                country: 'short_name', //long_name "Spain" and short_name "ES"
+                administrative_area_level_1: 'short_name',
+            };
+
+            function initAutocomplete() {
+                // Create the autocomplete object, restricting the search predictions to
+                // geographical location types.
+                autocomplete = new google.maps.places.Autocomplete(
+                        document.getElementById('cityName'), {types: ['geocode']});
+
+                // Avoid paying for data that you don't need by restricting the set of
+                // place fields that are returned to just the address components.
+                autocomplete.setFields(['address_component']);
+
+                // When the user selects a place from the drop-down,
+                // place fields in the form.
+
+                autocomplete.addListener('place_changed', fillInCityForWeather);
+            }
+
+            function fillInCityForWeather() {
+                // Get the place details from the autocomplete object.
+                var place = autocomplete.getPlace();
+
+                // Get each component of the address from the place details,
+                // and then fill-in the corresponding field on the form.
+                for (var i = 0; i < place.address_components.length; i++) {
+                    var addressType = place.address_components[i].types[0];
+                    if (componentForm[addressType]) {
+                        var val = place.address_components[i][componentForm[addressType]];
+                        document.getElementById(addressType).value = val;
+                        console.log("GOOGLE Send: ", val);
+                    }
+                }
+
+                //get lat and lng of the place
+                getLatLng($('#cityName').val());
+            }
+
+            function getLatLng(place) {
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({'address': place}, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        $("#lat").val(results[0].geometry.location.lat());
+                        $("#lng").val(results[0].geometry.location.lng());
+                        console.log($("#lat").val(), "  , " + $("#lng").val());
+                    } else {
+                        alert("latitude and longitude got wrong " + status);
+                    }
+                });
 
             }
-            var API_KEY_WEATHER = "my_api_key_here";
-            function checkWeather(city, country) {
-                var temperature;
-                console.log(city, country);
+
+
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+            function getCityName() {
+                $(':input').removeAttr('placeholder'); //clear placeholder
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var geolocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        var circle = new google.maps.Circle(
+                                {center: geolocation, radius: position.coords.accuracy});
+                        autocomplete.setBounds(circle.getBounds());
+                    });
+                }
+            }
+
+
+
+            var API_KEY_WEATHER = "b0fdd8a458f0675774e28d21de613184";
+            /**
+             * Request to openweathermap API using cityName and countryCode
+             * @returns {undefined}
+             */
+            function checkWeather() {
+                var city = $('#locality').val();
+                var country = $('#country').val();
+//                var state = $('#administrative_area_level_1').val();
+                var api_url;
+                //get weather using lat and lon if we dont have cityName
+                if(!city){
+                    city = $('#cityName').val(); //get the cityName in the input field
+                    var lat, lng;
+                    //I only need the 5 first digits to coincide with the digits in openweather API
+                    lat =  $('#lat').val().substr(0,5); 
+                    lng =  $('#lng').val().substr(0,5);
+                    api_url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lng + "&appid=" + API_KEY_WEATHER + "&units=metric";
+                }else{
+                    api_url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=" + API_KEY_WEATHER + "&units=metric";
+                }
+                
                 $.ajax({
                     method: "GET",
-                    url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=" + API_KEY_WEATHER + "&units=metric",
+                    url: api_url,
                     dataType: 'json',
                     success: function (data) {
-                        $("h2").html("The weather in <strong>" + data.name + "<strong>");
-                        temperature = data.main.temp;
-                        console.log(data);
-                        console.log("data.weather.main ---> ", data.weather[0].main);
-                        console.log("data.weather.main ---> ", data.main.temp);
-
-
-                        switch (data.weather[0].main) {
-                            case "Rain":
-//                                document.getElementById("main_container").style.backgroundImage = "url('./images/rain.jpg')";// JavaScript
-                                $("body").css("background-image", "url('./images/rain.jpg')");
-                                break;
-                            case "Drizzle":
-                                $("body").css("background-image", "url('./images/drizzle.jpg')");
-                                break;
-                            default:
-                                $("body").css("background-color", "white");
+                        if (data) {
+                            var main, description, temperature, temperatureMin, temperatureMax, wind;
+                            main = data.weather[0].main;
+                            description = data.weather[0].description;
+                            temperature = data.main.temp;
+                            temperatureMin = data.main.temp_min;
+                            temperatureMax = data.main.temp_max;
+                            wind = data.wind.speed;
+//                            $("h2").html("The weather in <strong>" + city + " </strong><br> Mainly <strong>" + description + "</strong><br>Temperature <strong>" + temperature + "º (from " + temperatureMin + " to " + temperatureMax + "º)</strong><br>Wind speed <strong>"+wind+"m/s</strong>");
+                            var content = "<h2 class='text-center'>The weather in <strong>" + city + " </strong><br> Mainly <strong>" + description + "</strong><br>Temperature <strong>" + temperature + "º (from " + temperatureMin + " to " + temperatureMax + "º)</strong><br>Wind speed <strong>"+wind+"m/s</strong></h2>";
+                            $("#container_result").empty();
+                            $("#container_result").append(content);
+                            $("#container_result").css({'background-image': 'url(./images/' + main + '.jpg)',
+                                'background-repeat': 'repeat',
+                                'background-size': 'cover'});
+                        }else{
+                            $("#container_result").append("Something went wrong try in the next 2 minutes");
                         }
                     }
-                })
-
+                });
             }
+
+
         </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCc7Ng1L6NfJGM-KYNrCGjfBGIU6c843EQ&language=en&libraries=places&callback=initAutocomplete" async defer></script>
+
     </body>
 </html>
