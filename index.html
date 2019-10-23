@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <html>
     <head>
         <title>Check the weather</title>
@@ -19,7 +15,7 @@ and open the template in the editor.
                 font-family: inherit;
                 background-image: linear-gradient(to right, #252424, gray, #3c3c3c, black); 
             }
-
+            
             .form_container{
                 background: gray;
                 height: 400px;
@@ -35,7 +31,7 @@ and open the template in the editor.
                 line-height: inherit;
             }
 
-            .btn_search{ 
+            .btn_reload{ 
                 margin-bottom: 30px;
             }
 
@@ -69,22 +65,89 @@ and open the template in the editor.
                 height: 400px;
             }
 
-            .no_weather{
-                position: relative;
-                -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-                -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
-                -webkit-animation-iteration-count: 3; /* Safari 4.0 - 8.0 */
-                animation-name: example;
-                animation-duration: 4s;
-                animation-iteration-count: 3;
+            /*animation img 1*/
+            .div_img{
+                height: 100px;
+                -webkit-animation: mymove_1 30s infinite; /* Safari 4.0 - 8.0 */
+                -webkit-animation-delay: 2s; /* Safari 4.0 - 8.0 */
+                animation: mymove_1 30s infinite;
+                animation-direction: alternate;
             }
-            /*zoom*/
-            /*            #container_result:hover {
-                            -ms-transform: scale(1.2);  IE 9 
-                            -webkit-transform: scale(1.2);  Safari 3-8 
-                            transform: scale(1.2); 
-                        }*/
+            /* Safari 4.0 - 8.0 */
+            @-webkit-keyframes mymove_1 {
+                0%   {left: 0px; top: 0px;}
+                25%  {left: 180px; top: 0px;}
+                50%  {left: 180px; top: 180px;}
+                75%  {left: 0px; top: 200px;}
+                100% {left: 0px; top: 0px;}
+            }
+            @keyframes mymove_1 {
+                0%   {left: 0px; top: 0px;}
+                25%  {left: 180px; top: 0px;}
+                50%  {left: 180px; top: 180px;}
+                75%  {left: 0px; top: 180px;}
+                100% {left: 0px; top: 0px;}
+            }
 
+            /*animation img 2*/
+            .div_img_2{
+                height: 100px;
+                -webkit-animation: mymove_2 30s infinite; /* Safari 4.0 - 8.0 */
+                -webkit-animation-delay: 2s; /* Safari 4.0 - 8.0 */
+                animation: mymove_2 30s infinite;
+                animation-direction: alternate;
+            }
+            /* Safari 4.0 - 8.0 */
+            @-webkit-keyframes mymove_2 {
+                0%   {right: 0px; top: 0px;}
+                25%  {right: 0px; top: 300px;}
+                50%  {right: 180px; top: 0px;}
+                75%  {right: 180px; top: 0px;}
+                100% {right: 0px; top: 0px;}
+            }
+            @keyframes mymove_2 {
+                0%   {right: 0px; top: 0px;}
+                25%  {right: 0px; top: 300px;}
+                50%  {right: 180px; top: 0px;}
+                75%  {right: 180px; top: 0px;}
+                100% {right: 0px; top: 0px;}
+            }
+
+            /*animation img 3*/   
+            .div_img_3{
+                -webkit-animation: mymove_3 8s infinite; /* Safari 4.0 - 8.0 */
+                -webkit-animation-alternate: 4s; /* Safari 4.0 - 8.0 */
+                animation: mymove_3 12s infinite;
+                animation-direction: alternate;
+            }
+            @-webkit-keyframes mymove_3 {
+                from {top: 300px;}
+                to {top: 0px;}
+            }
+
+            @keyframes mymove_3 {
+                from {top: 300px;}
+                to {top: 0px;}
+            }
+
+
+            /*small devices (mobiles, 320px and up)*/
+            @media (min-width: 320px) and (max-width: 767px) {
+                .btn_reload{
+                    margin-top: 30px;
+                }
+                
+                h1, h2{
+                    margin: 0px;
+                    padding: 0px;
+                }
+                .form_container {
+                    height: 158px;
+                }
+                #container_result{
+                    height: auto;
+                }
+            }
         </style>
     </head>
     <body>
@@ -95,7 +158,7 @@ and open the template in the editor.
             <div class='col-md-4 form_container'>
                 <div class='container_content'>
                     <div class="text-center div_buttons">
-                        <button type="button" class='w3-button w3-teal btn-lg btn_search' onclick='searchForm()'>Search city</button>
+                        <button type="button" class='w3-button w3-teal btn-lg btn_reload' onclick='searchForm()'>Refresh</button>
                     </div>
 
                     <div class='clearfix'></div>
@@ -118,6 +181,16 @@ and open the template in the editor.
                 </div>
             </div>
             <div class="col-md-8" id='container_result'>
+                <div class=" div_img col-xs-4 col-md-2">
+                    <img src="./images/rain-and-sun.png" class="img-responsive">
+                </div>
+                <div class="col-xs-4 col-md-8"></div>
+                <div class=" div_img_2 col-xs-4 col-md-2">
+                    <img src="./images/rain-and-sun.png" class="img-responsive">
+                </div>
+                <div class=" div_img_3 col-xs-4 col-md-2">
+                    <img src="./images/rain-and-sun.png" class="img-responsive">
+                </div>
             </div>
 
         </div>
@@ -129,9 +202,7 @@ and open the template in the editor.
             //hide result of the weather sowed bwfore,
             //remove input placeholder, input last value and set focus on the input
             function searchForm() {
-                $('#container_result').hide();
-                $(':input').removeAttr('placeholder'); //clear placeholder
-                $('#cityName').val(''); //remove the last value
+                location.reload();//reload the page
                 $('#cityName').focus();
             }
 
@@ -169,7 +240,6 @@ and open the template in the editor.
                     if (componentForm[addressType]) {
                         var val = place.address_components[i][componentForm[addressType]];
                         document.getElementById(addressType).value = val;
-                        console.log("GOOGLE Send: ", val);
                     }
                 }
 
@@ -183,7 +253,6 @@ and open the template in the editor.
                     if (status == google.maps.GeocoderStatus.OK) {
                         $("#lat").val(results[0].geometry.location.lat());
                         $("#lng").val(results[0].geometry.location.lng());
-                        console.log($("#lat").val(), "  , " + $("#lng").val());
                     } else {
                         alert("latitude and longitude got wrong " + status);
                     }
@@ -211,7 +280,7 @@ and open the template in the editor.
 
 
 
-            var API_KEY_WEATHER = "b0fdd8a458f0675774e28d21de613184";
+            var API_KEY_WEATHER = "my_api_weather_here";
             /**
              * Request to openweathermap API using cityName and countryCode
              * @returns {undefined}
@@ -222,17 +291,17 @@ and open the template in the editor.
 //                var state = $('#administrative_area_level_1').val();
                 var api_url;
                 //get weather using lat and lon if we dont have cityName
-                if(!city){
+                if (!city) {
                     city = $('#cityName').val(); //get the cityName in the input field
                     var lat, lng;
                     //I only need the 5 first digits to coincide with the digits in openweather API
-                    lat =  $('#lat').val().substr(0,5); 
-                    lng =  $('#lng').val().substr(0,5);
-                    api_url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lng + "&appid=" + API_KEY_WEATHER + "&units=metric";
-                }else{
+                    lat = $('#lat').val().substr(0, 5);
+                    lng = $('#lng').val().substr(0, 5);
+                    api_url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=" + API_KEY_WEATHER + "&units=metric";
+                } else {
                     api_url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=" + API_KEY_WEATHER + "&units=metric";
                 }
-                
+
                 $.ajax({
                     method: "GET",
                     url: api_url,
@@ -247,13 +316,13 @@ and open the template in the editor.
                             temperatureMax = data.main.temp_max;
                             wind = data.wind.speed;
 //                            $("h2").html("The weather in <strong>" + city + " </strong><br> Mainly <strong>" + description + "</strong><br>Temperature <strong>" + temperature + "º (from " + temperatureMin + " to " + temperatureMax + "º)</strong><br>Wind speed <strong>"+wind+"m/s</strong>");
-                            var content = "<h2 class='text-center'>The weather in <strong>" + city + " </strong><br> Mainly <strong>" + description + "</strong><br>Temperature <strong>" + temperature + "º (from " + temperatureMin + " to " + temperatureMax + "º)</strong><br>Wind speed <strong>"+wind+"m/s</strong></h2>";
+                            var content = "<h2 class='text-center'>The weather in <strong>" + city + " </strong><br> Mainly <strong>" + description + "</strong><br>Temperature <strong>" + temperature + "º (from " + temperatureMin + " to " + temperatureMax + "º)</strong><br>Wind speed <strong>" + wind + "m/s</strong></h2>";
                             $("#container_result").empty();
                             $("#container_result").append(content);
                             $("#container_result").css({'background-image': 'url(./images/' + main + '.jpg)',
                                 'background-repeat': 'repeat',
                                 'background-size': 'cover'});
-                        }else{
+                        } else {
                             $("#container_result").append("Something went wrong try in the next 2 minutes");
                         }
                     }
@@ -262,7 +331,7 @@ and open the template in the editor.
 
 
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCc7Ng1L6NfJGM-KYNrCGjfBGIU6c843EQ&language=en&libraries=places&callback=initAutocomplete" async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY_GOOGLE&language=en&libraries=places&callback=initAutocomplete" async defer></script>
 
     </body>
 </html>
